@@ -2,6 +2,7 @@
 
 app_name=app.exe
 # build 
+./build_test.sh
 make $app_name
 mv $app_name func_tests
 
@@ -23,10 +24,15 @@ function postest() {
 
     if [ -z "$(diff -q $3 out.txt)" ]
     then
+        printf "Passed for $3\n"
         passed_tests=$((passed_tests + 1))
+        printf "<---------------------------------->\n"
     else
         printf "Failed for $3| return code is $status\n"
         printf "$(diff -c $3 out.txt)\n"
+        printf "\n====\n"
+        printf "In: \n"
+        cat $2
         printf "\n====\n"
         printf "Expected: \n"
         cat $3
@@ -59,7 +65,9 @@ function negtest() {
         failed_tests=$((failed_tests + 1))
         printf "<---------------------------------->\n"
     else
+        printf "Passed for $3\n"
         passed_tests=$((passed_tests + 1))
+        printf "<---------------------------------->\n"
     fi
     rm -rf ./.temp
     total_tests=$((total_tests + 1))
